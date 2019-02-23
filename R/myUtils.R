@@ -28,7 +28,7 @@ cpm = function(data)
 
 rpkm = function(data,geneLengths){
   totalNumReads = colSums(data)
-  test = data / sapply(1:length(totalNumReads), function(x) geneLengths/10^3 * totalNumReads[x]/10^6)
+  data = data / sapply(1:length(totalNumReads), function(x) geneLengths/10^3 * totalNumReads[x]/10^6)
   return(data)
 }
 
