@@ -32,6 +32,26 @@ rpkm = function(data,geneLengths){
   return(data)
 }
 
+#' Map gene ids between one another for mouse
+#' 
+#' This function maps ids such as symbols , entrez ids, ensembls ids between each other
+#'
+#' @param IDs The IDs to be mapped
+#' @param IDFrom The current ID format, such as SYMBOL, ENSEMBL
+#' @param IDTo The ID type to map to, such as SYMBOL, ENSEMBL
+#' @export
+
+mapIdsMouse<-function(IDs,IDFrom,IDTo){
+  require(org.Mm.eg.db)
+  idmap=mapIds(x = org.Mm.eg.db,keys = IDs,column = IDTo, keytype = IDFrom,multiVals = "first")
+  na_vec=names(idmap[is.na(idmap)==T])
+  idmap=idmap[is.na(idmap)==F]
+  idmap_df=data.frame("From"=names(idmap),"To"=unlist(unname(idmap)),stringsAsFactors = F)
+  idmap_df = idmap_df[match(idmap_df[,2], idmap_df[,2]),]
+  idmap_df = idmap_df[match(idmap_df[,1], idmap_df[,1]),]
+  IDs[match(idmap_df[,1], IDs)] = idmap_df[,2]
+  return(IDs)
+}
 
 
 
